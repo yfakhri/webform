@@ -11,6 +11,5 @@ export const firebase = {
 export const reduxFirebase = {
   userProfile: 'users',
   useFirestoreForProfile: true,
-  enableLogging: false
 }
 

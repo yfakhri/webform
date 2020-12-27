@@ -5,6 +5,8 @@ import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { useFirebase, useFirestore,useFirestoreConnect } from 'react-redux-firebase';
+import { useHistory } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme: Theme)=>createStyles({
@@ -27,6 +29,16 @@ const useStyles = makeStyles((theme: Theme)=>createStyles({
 }))
 function Login() {
     const classes = useStyles();
+    const firebase = useFirebase();
+    const history = useHistory();
+    const signInWithGoogle = () =>{
+        firebase.login({
+            provider:"google",
+            type:"popup",
+        }).then(()=>{
+            history.push("/");
+        })
+    };
     return (
         <Grid container component="main" justify="center" className={classes.root}>
             <Grid item xs={false} sm={12} ></Grid>
@@ -36,7 +48,10 @@ function Login() {
                     <Typography component="h1" variant="h5">
                         Sign in
                     </Typography>
-                    <Button variant="contained" color="primary" fullWidth className={classes.submit}>Sign in with Google</Button>
+                    <Button variant="contained" color="primary" onClick={(event)=>{
+                        event.preventDefault();
+                        signInWithGoogle();
+                    }} fullWidth className={classes.submit}>Sign in with Google</Button>
                 </div>
             </Grid>
             <Grid item xs={false} sm={12}></Grid>

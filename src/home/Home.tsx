@@ -15,6 +15,10 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
+import { useFirebase, useFirestore,useFirestoreConnect } from 'react-redux-firebase';
+import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../app/store';
 
 const drawerWidth = 240;
 
@@ -61,6 +65,16 @@ interface Props {
 }
 
 export default function ResponsiveDrawer(props: Props) {
+  const firebase = useFirebase();
+  const firestore = useFirestore();
+  const history = useHistory();
+  const profile = useSelector((state:RootState)=>state.firebase.profile);
+  const auth = useSelector((state:RootState) => state.firebase.auth);
+  useFirestoreConnect([
+    { collection: 'questions' } 
+  ])
+  const baok = useSelector((state:RootState)=>state);
+  const questions = useSelector((state:RootState)=>state.firestore.ordered.questions);
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -145,6 +159,24 @@ export default function ResponsiveDrawer(props: Props) {
       </nav>
       <main className={classes.content}>
         <div className={classes.toolbar} />
+        <button onClick={(event)=>{
+          event.preventDefault();
+          firestore.collection('questions').add({jenis:"yyy",pertanyaan:"abcd"})
+          firebase.logout().then(()=>{
+            history.push("/login");
+          });
+        }}>a</button>
+        <div>x{JSON.stringify(profile, null, 2)}</div><br/>
+        <div>y{JSON.stringify(auth, null, 2)}</div><br/>
+        <div>z{console.log(baok)}</div>
+        <ul>
+      {questions &&
+        questions.map((todo:{id:string,jenis:string}) => (
+          <li key={todo.id}>
+            id: {todo.id} todo: {todo.jenis}
+          </li>
+        ))}
+    </ul>
         <Typography paragraph>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
           ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum

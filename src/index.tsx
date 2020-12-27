@@ -2,15 +2,37 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import { store } from './app/store';
-import { firebase as fbConfig, reduxFirebase as rfConfig} from './config';
-import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
+
+//*redux
+import { store } from './app/store';
+import { Provider } from 'react-redux';
+
+//*firebase
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
+import { firebase as fbConfig, reduxFirebase as rfConfig} from './config';
+import { createFirestoreInstance } from 'redux-firestore';
+import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
+
+//*init
+firebase.initializeApp(fbConfig);
+firebase.firestore();
+
+const rrfProps = {
+  firebase,
+  config: rfConfig,
+  dispatch: store.dispatch,
+  createFirestoreInstance
+}
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <ReactReduxFirebaseProvider {...rrfProps}>
+        <App />
+      </ReactReduxFirebaseProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')
