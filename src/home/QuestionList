@@ -1,0 +1,16 @@
+import React from 'react'
+import { DataGrid, ColDef, RowsProp} from '@material-ui/data-grid'
+
+const columns: ColDef[] = [
+    {field: 'no', headerName: 'No.', type:'number' ,width: 70},
+    {field: 'question', headerName: 'Pertanyaan', width: 130},
+    {field: 'type', headerName: 'Jenis Pertanyaan', width: 130},
+]
+
+export default function QuestionList(){
+    return(
+        <>
+            <DataGrid rows={null} columns={columns} pageSize={5} checkboxSelection />
+        </>
+    );
+}

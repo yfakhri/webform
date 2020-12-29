@@ -1,8 +1,10 @@
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
+import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
+import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
@@ -12,6 +14,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
+import Paper from '@material-ui/core/Paper';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
@@ -19,6 +22,7 @@ import { useFirebase, useFirestore,useFirestoreConnect } from 'react-redux-fireb
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../app/store';
+import QuestionList from './QuestionList';
 
 const drawerWidth = 240;
 
@@ -50,18 +54,25 @@ const useStyles = makeStyles((theme: Theme) =>
     drawerPaper: {
       width: drawerWidth,
     },
+    container: {
+      paddingTop: theme.spacing(4),
+      paddingBottom: theme.spacing(4),
+    },
     content: {
       flexGrow: 1,
       padding: theme.spacing(3),
+    },
+    paper: {
+      padding: theme.spacing(2),
+      display: 'flex',
+      overflow: 'auto',
+      flexDirection: 'column',
     },
   }),
 );
 
 interface Props {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
+
 }
 
 export default function ResponsiveDrawer(props: Props) {
@@ -159,6 +170,12 @@ export default function ResponsiveDrawer(props: Props) {
       </nav>
       <main className={classes.content}>
         <div className={classes.toolbar} />
+        <Container maxWidth="lg" className={classes.container}>
+        <Grid item xs={12}>
+          <Paper className={classes.paper}>
+            <QuestionList />
+          </Paper>
+        </Grid>
         <button onClick={(event)=>{
           event.preventDefault();
           firestore.collection('questions').add({jenis:"yyy",pertanyaan:"abcd"})
@@ -200,6 +217,7 @@ export default function ResponsiveDrawer(props: Props) {
           nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
           accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
         </Typography>
+        </Container>
       </main>
     </div>
   );
